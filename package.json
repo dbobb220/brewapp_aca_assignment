@@ -1,0 +1,23 @@
+{
+  "name": "brewapp_aca_assignment",
+  "version": "1.0.0",
+  "description": "",
+  "main": "brewapp.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/dbobb220/brewapp_aca_assignment.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/dbobb220/brewapp_aca_assignment/issues"
+  },
+  "homepage": "https://github.com/dbobb220/brewapp_aca_assignment#readme",
+  "dependencies": {
+    "dotenv": "^8.0.0"
+  }
+}
