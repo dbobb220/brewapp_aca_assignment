@@ -1,31 +1,54 @@
-//require('dotenv').config()
+require('dotenv').config();
+const fetch = require('node-fetch');
+const readline = require('readline');
+const colors = require('colors');
 
-//geo-location of user
-document.querySelector('#button').addEventListener('click',geoFindMe);
-function geoFindMe(){
-   //we don't really need this to display on webpage or anything between line 7 and 19
-    const status = document.querySelector('#status');
-    const mapLink = document.querySelector('#mapLink');
-    mapLink.href = '';
-    mapLink.textContent = '';
+const apiKey = process.env.API_KEY; 
 
-    function success(position) {
-      const latitude  = position.coords.latitude;
-      const longitude = position.coords.longitude;
-  
-      status.textContent = '';
-      mapLink.href = `https://www.gps-coordinates.net/`;
-      mapLink.textContent = `Latitude: ${latitude} °, Longitude: ${longitude} °`;
-    }
-    function error() {
-      status.textContent = 'Unable to retrieve your location';
-    }
-    if (!navigator.geolocation) {
-      status.textContent = 'Geolocation is not supported by your browser';
+const baseURL = 'https://sandbox-api.brewerydb.com/v2/';
+
+const rl = readline.createInterface({
+  input: process.stdin,
+  output: process.stdout
+});
+
+function getPrompt() {
+  rl.question('Which US zipcode would you like to look up? ', (zipcode) => {
+  getBreweries(zipcode);
+  });
+}
+
+const getBreweries = (zipcode) => {
+  fetch(baseURL + 'locations/?key=' + apiKey + `&postalCode=` + zipcode)
+  .then(res => {
+    if(!res.ok) {
+      throw Error(res.statusText);
+    } return res.json();
+  })
+  .then(obj => {
+    const data = obj.data;
+    if (obj.totalResults === undefined) {
+      console.log('No breweries available. Try another zipcode.'.red);
+      getPrompt();
     } else {
-      status.textContent = 'Locating…';
-      navigator.geolocation.getCurrentPosition(success, error);
+      console.log(colors.blue('Total Results: ') + obj.totalResults);
+      console.log(' ');
+      printResults(data);
     }
-  }
-//send location in fetch to brew
-//data should have brew in areay of user
+  })
+  .catch(err => console.log(`Error,  ${err}`))
+}
+
+const printResults = (brewery) => {
+  brewery.forEach(val => {
+    console.log(colors.green('Name: ') + val.name);
+    console.log(colors.green('Phone: ') + val.phone);
+    console.log(colors.green('Website: ') + val.website);
+    console.log(colors.green('Address: ') + val.streetAddress);
+    console.log(colors.green('Desription: ') + val.brewery.description); 
+    console.log(' ');
+  });
+  getPrompt();
+}
+
+getPrompt();
