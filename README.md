@@ -1,4 +1,4 @@
-# Brew App Lookup - Terminal
+# Brewery Lookup App - Terminal
 
 ### Project Description:
 
