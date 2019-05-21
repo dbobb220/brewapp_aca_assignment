@@ -1,4 +1,5 @@
 require('dotenv').config();
+const assert = require('assert');
 const fetch = require('node-fetch');
 const readline = require('readline');
 const colors = require('colors');
@@ -18,7 +19,7 @@ function getPrompt() {
   });
 }
 
-const getBreweries = (zipcode) => {
+const getBreweries = (fetch, zipcode) => {
   fetch(baseURL + 'locations/?key=' + apiKey + `&postalCode=` + zipcode)
   .then(res => {
     if(!res.ok) {
@@ -52,3 +53,16 @@ const printResults = (brewery) => {
 }
 
 getPrompt();
+
+describe('getBrewerie', ()=>{
+  it('tests if address is wrong', ()=>{
+    const testFetch = url =>{
+      assert (
+      url = baseURL + 'locations/?key=' + apiKey + `&postalCode=78758`
+      )
+      return new Promise(function(){})
+    }
+    getBreweries(testFetch, '78758')
+})
+})
+console.log(getBreweries);
