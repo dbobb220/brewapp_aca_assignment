@@ -69,6 +69,7 @@ describe('getBreweries', ()=>{
       baseURL === 'https://sand-api.brewerydb.com/v2/locations/?key='
       assert.equal(getBreweries(testFetch), err)
     }
+    
 })
  it('test wrong apiKey', ()=>{
    const testFetch = url =>{
@@ -79,6 +80,11 @@ describe('getBreweries', ()=>{
    }
    getBreweries(testFetch)
  })
+ it('should say when there are no breweries in that area', ()=> {
+   const testFetch = url =>{
+  assert.equal(getBreweries(fetch, '7870123'), 12345)
+   }
+})
  
 })
 
