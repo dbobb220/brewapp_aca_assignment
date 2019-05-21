@@ -4,9 +4,9 @@ const fetch = require('node-fetch');
 const readline = require('readline');
 const colors = require('colors');
 
-const apiKey = process.env.API_KEY; 
+let apiKey = process.env.API_KEY; 
 
-const baseURL = 'https://sandbox-api.brewerydb.com/v2/';
+let baseURL = 'https://sandbox-api.brewerydb.com/v2/locations/?key=';
 
 const rl = readline.createInterface({
   input: process.stdin,
@@ -15,12 +15,12 @@ const rl = readline.createInterface({
 
 function getPrompt() {
   rl.question('Which US zipcode would you like to look up? ', (zipcode) => {
-  getBreweries(zipcode);
+  getBreweries(fetch, zipcode);
   });
 }
 
 const getBreweries = (fetch, zipcode) => {
-  fetch(baseURL + 'locations/?key=' + apiKey + `&postalCode=` + zipcode)
+  return fetch(baseURL + apiKey + '&postalCode=' + zipcode)
   .then(res => {
     if(!res.ok) {
       throw Error(res.statusText);
@@ -51,18 +51,24 @@ const printResults = (brewery) => {
   });
   getPrompt();
 }
-
 getPrompt();
 
-describe('getBrewerie', ()=>{
+describe('getBreweries', ()=>{
+  it('calls fetch with the correct url', () => {
+    const fakeFetch = url => {
+      assert(
+         baseURL === 'https://sandbox-api.brewerydb.com/v2/locations/?key='
+      )
+      return new Promise(function(resolve) {
+      })
+    }
+    getBreweries(fakeFetch)
+  })
   it('tests if address is wrong', ()=>{
     const testFetch = url =>{
-      assert (
-      url = baseURL + 'locations/?key=' + apiKey + `&postalCode=78758`
-      )
-      return new Promise(function(){})
+      baseURL === 'https://sand-api.brewerydb.com/v2/locations/?key='
+      assert.equal(getBreweries(testFetch), err)
     }
-    getBreweries(testFetch, '78758')
 })
  it('test wrong apiKey', ()=>{
    const testFetch = url =>{
@@ -71,7 +77,8 @@ describe('getBrewerie', ()=>{
      )
      return new Promise(function(){} )
    }
-   getBreweries(testFetch, '78758')
+   getBreweries(testFetch)
  })
+ 
 })
-console.log(getBreweries);
+
