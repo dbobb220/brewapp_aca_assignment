@@ -64,5 +64,14 @@ describe('getBrewerie', ()=>{
     }
     getBreweries(testFetch, '78758')
 })
+ it('test wrong apiKey', ()=>{
+   const testFetch = url =>{
+     assert (
+      apiKey = process.env.API_KEY
+     )
+     return new Promise(function(){} )
+   }
+   getBreweries(testFetch, '78758')
+ })
 })
 console.log(getBreweries);
