@@ -73,17 +73,23 @@ describe('getBreweries', ()=>{
 })
  it('test wrong apiKey', ()=>{
    const testFetch = url =>{
-     assert (
-      apiKey = process.env.API_KEY
-     )
-     return new Promise(function(){} )
+      apiKey === "magic key"
+      assert.equal(getBreweries(testFetch), err)
    }
-   getBreweries(testFetch)
+   
  })
- it('should say when there are no breweries in that area', ()=> {
-   const testFetch = url =>{
-  assert.equal(getBreweries(fetch, '7870123'), 12345)
+ it('breweries in this postalcode', ()=> {
+   const testFetch = () =>{
+     return Promise.resolve({
+       json(){return{
+          data:[
+           {postalCode: "28732"}
+         ]
+       }}
+     })
    }
+   return getBreweries(testFetch)
+    .then(data => assert([data.postalCode === "28732"]))
 })
  
 })
